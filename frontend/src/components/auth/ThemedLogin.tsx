@@ -15,7 +15,7 @@ export default function ThemedLogin() {
             Proof your idea with real feedback
           </h1>
           <p className="mt-4 text-lg text-gray-600">
-            Share your concept, get honest reactions, and evolve it with the crowd — before you invest months building.
+            Share your concept, get honest reactions, and evolve it with the crowd, before you invest months building.
           </p>
 
           <ul className="mt-6 space-y-3 text-sm text-gray-700">

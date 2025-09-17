@@ -11,7 +11,7 @@ export default function Hero() {
         style={{
           backgroundImage:
             "linear-gradient(to right, #f2f4f7 1px, transparent 1px), linear-gradient(to bottom, #f2f4f7 1px, transparent 1px)",
-          backgroundSize: "32px 32px",
+          backgroundSize: "32px 31px",
         }}
       />
       {/* Soft fade mask so the grid doesn’t feel harsh */}
@@ -27,7 +27,7 @@ export default function Hero() {
       />
 
       {/* Content: vertically centered and tall */}
-      <div className="relative mx-auto flex min-h-[88vh] max-w-6xl flex-col items-center justify-center px-4 text-center">
+      <div className="relative mx-auto flex min-h-[91vh] max-w-6xl flex-col items-center justify-center px-4 text-center">
         <div className="pill mb-6">
           <span className="h-2 w-2 rounded-full bg-brand-500" />
           Pitch. Critique. Evolve.

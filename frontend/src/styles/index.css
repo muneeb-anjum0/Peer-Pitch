@@ -6,6 +6,11 @@
 
 html, body, #root { height: 100%; background: #ffffff; }
 
+/* Prevent layout shift when switching between pages of different heights */
+html {
+  overflow-y: scroll;
+}
+
 * { -webkit-tap-highlight-color: transparent; }
 
 ::selection { background: rgba(42,148,255,.15); }

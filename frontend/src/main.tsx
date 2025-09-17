@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import Trending from "./pages/Trending";
 import New from "./pages/New";
 import PitchDetail from "./pages/PitchDetail";
-import PostPitch from "./pages/PostPitch";
+import PostPitch from "./pages/Post";
 import "./styles/index.css";
 
 const router = createBrowserRouter([

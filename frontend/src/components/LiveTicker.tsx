@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
 
 const items = [
-  { user: "Sara", action: "upvoted", what: "AI for Urdu legal docs" },
-  { user: "Ali", action: "commented on", what: "Solo founder CRM" },
-  { user: "Noah", action: "posted", what: "Instant grocery co-op" },
-  { user: "Maya", action: "upvoted", what: "One-tap tutor" },
-  { user: "Usman", action: "posted", what: "Figma → React exporter" },
+ { user: "Sara", action: "shared an idea", what: "AI for Urdu legal docs" },
+  { user: "Ali", action: "proofed", what: "Neighborhood Co-op" },
+  { user: "Noah", action: "reacted to", what: "Flash Feedback for Coders" },
+  { user: "Maya", action: "shared an idea", what: "Instant Mentor Matching" },
+  { user: "Zara", action: "proofed", what: "Community Tool Library" },
 ];
 
 export default function LiveTicker() {

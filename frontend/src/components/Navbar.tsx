@@ -9,7 +9,6 @@ export default function Navbar({ onLogoClick }: { onLogoClick?: () => void }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  // Blur on scroll
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -18,7 +17,6 @@ export default function Navbar({ onLogoClick }: { onLogoClick?: () => void }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Tabs (desktop)
   const tabs = [
     { label: "Home", to: "/", isActive: (p: string) => p === "/" },
     { label: "Trending", to: "/trending", isActive: (p: string) => p.startsWith("/trending") },
@@ -39,18 +37,11 @@ export default function Navbar({ onLogoClick }: { onLogoClick?: () => void }) {
     setSlider({ left: eRect.left - cRect.left, width: eRect.width });
   };
 
-  // Recalculate on route change and resize (useLayoutEffect to avoid flicker)
-  useLayoutEffect(() => { updateSlider(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [pathname]);
+  useLayoutEffect(() => { updateSlider(); }, [pathname]);
   useEffect(() => {
     const onResize = () => updateSlider();
     window.addEventListener("resize", onResize);
-    const ro = new ResizeObserver(updateSlider);
-    if (containerRef.current) ro.observe(containerRef.current);
-    return () => {
-      window.removeEventListener("resize", onResize);
-      ro.disconnect();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
   return (
@@ -60,16 +51,14 @@ export default function Navbar({ onLogoClick }: { onLogoClick?: () => void }) {
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-        {/* Brand */}
         <button
           onClick={onLogoClick}
           className="text-lg font-black tracking-tight text-gray-900"
-          aria-label="PeerPitch Home"
+          aria-label="PulseProof Home"
         >
-          PeerPitch
+          PulseProof
         </button>
 
-        {/* Desktop nav with morphing underline */}
         <nav className="relative hidden sm:block">
           <div ref={containerRef} className="relative flex items-center gap-8">
             {tabs.map((t, i) => {
@@ -77,7 +66,7 @@ export default function Navbar({ onLogoClick }: { onLogoClick?: () => void }) {
               return (
                 <button
                   key={t.to}
-                  ref={(el: HTMLButtonElement | null) => { btnRefs.current[i] = el; }}
+                  ref={el => (btnRefs.current[i] = el)}
                   onClick={() => navigate(t.to)}
                   className={`relative pb-1 text-sm font-medium transition-colors ${
                     active ? "text-gray-900" : "text-gray-500 hover:text-gray-700"
@@ -87,8 +76,6 @@ export default function Navbar({ onLogoClick }: { onLogoClick?: () => void }) {
                 </button>
               );
             })}
-
-            {/* The shared underline slider */}
             <span
               className="pointer-events-none absolute bottom-0 h-[2px] rounded-full bg-brand-500 transition-[left,width] duration-300 ease-in-out"
               style={{
@@ -99,7 +86,6 @@ export default function Navbar({ onLogoClick }: { onLogoClick?: () => void }) {
           </div>
         </nav>
 
-        {/* Actions */}
         <div className="flex items-center gap-2">
           <button onClick={() => (user ? navigate("/post") : firebaseLoginGoogle())}>
             <Button variant="primary" size="md">{user ? "Post" : "Login"}</Button>

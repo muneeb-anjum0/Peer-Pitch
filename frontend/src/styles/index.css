@@ -68,3 +68,19 @@ html, body, #root { height: 100%; background: #ffffff; }
 
 /* Avoid blue focus rings ugliness while keeping a11y */
 :focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(42,148,255,.35) !important; border-radius: 12px; }
+
+/* Make hero content pop over orbs */
+section > .relative { position: relative; z-index: 1; }
+
+/* Smooth out any banding on large gradients */
+@media (min-width: 640px) {
+  .antialias-grad { filter: saturate(1.05) contrast(1.02); }
+}
+
+/* Scroll cue animation */
+@keyframes cue {
+  0% { transform: translateY(0); opacity: .5; }
+  50% { transform: translateY(4px); opacity: 1; }
+  100% { transform: translateY(0); opacity: .5; }
+}
+.scroll-cue { animation: cue 1.6s ease-in-out infinite; }

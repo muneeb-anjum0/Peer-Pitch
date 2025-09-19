@@ -1,3 +1,4 @@
+
 import { Router } from "express";
 import { z } from "zod";
 import { db } from "../lib/firebaseAdmin.js";
@@ -12,10 +13,21 @@ const pitchRef = (id: string) => db.collection("pitches").doc(id);
 const commentsCol = (pitchId: string) => pitchRef(pitchId).collection("comments");
 const votesCol = (pitchId: string) => pitchRef(pitchId).collection("votes"); // docId = uid, {delta: 1 | -1}
 
+/** GET /pitches/bundle/trending - returns a Firestore bundle for trending pitches */
+pitches.get("/bundle/trending", async (req, res) => {
+  const q = db.collection("pitches").orderBy("votes", "desc").limit(20);
+  const snap = await q.get();
+  const bundle = db.bundle("trendingPitches");
+  bundle.add("trending", snap);
+  const buffer = bundle.build();
+  res.setHeader("Content-Type", "application/octet-stream");
+  res.send(buffer);
+});
+
 /** GET /pitches/trending */
 pitches.get("/trending", async (req, res) => {
   const { window } = req.query as { window?: "today" | "week" | "all" };
-  let q = db.collection("pitches").orderBy("votes", "desc").limit(50);
+  let q = db.collection("pitches").orderBy("votes", "desc").limit(20);
   // Optional: filter by createdAt window — simple client hint; keep all for now
   const snap = await q.get();
   const data = snap.docs.map(d => ({ _id: d.id, ...d.data() })) as Pitch[];
@@ -24,7 +36,7 @@ pitches.get("/trending", async (req, res) => {
 
 /** GET /pitches/latest */
 pitches.get("/latest", async (_req, res) => {
-  const snap = await db.collection("pitches").orderBy("createdAt", "desc").limit(50).get();
+  const snap = await db.collection("pitches").orderBy("createdAt", "desc").limit(20).get();
   const data = snap.docs.map(d => ({ _id: d.id, ...d.data() })) as Pitch[];
   res.json(data);
 });

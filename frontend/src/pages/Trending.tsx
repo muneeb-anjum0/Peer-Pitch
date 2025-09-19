@@ -1,3 +1,15 @@
+// Extend Window type for SSR hydration
+declare global {
+  interface Window {
+    __TRENDING_PITCHES__?: import("../types").Pitch[];
+  }
+}
+// Extend Window type for SSR hydration
+declare global {
+  interface Window {
+    __TRENDING_PITCHES__?: import("../types").Pitch[];
+  }
+}
 import { useEffect, useRef, useState } from "react";
 import { usePitches } from "../store/pitches";
 import PitchCard from "../components/PitchCard";
@@ -43,7 +55,7 @@ function StarIcon() {
 }
 
 export default function Trending() {
-  const fetchTrending = usePitches((s) => s.fetchTrending);
+  const fetchTrending = usePitches.getState().fetchTrending;
   const trendingRaw = usePitches((s) => s.trending);
   const trending = Array.isArray(trendingRaw) ? trendingRaw : [];
   const loadingTrending = usePitches((s) => s.loadingTrending);
@@ -52,8 +64,14 @@ export default function Trending() {
   const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [slider, setSlider] = useState<{ left: number; width: number }>({ left: 0, width: 0 });
 
-
-  useEffect(() => { fetchTrending(); }, [fetchTrending]);
+  useEffect(() => {
+    // SSR hydration: use window.__TRENDING_PITCHES__ if available
+    if (Array.isArray(window.__TRENDING_PITCHES__)) {
+  usePitches.getState().fetchTrending(window.__TRENDING_PITCHES__);
+    } else {
+  usePitches.getState().fetchTrending();
+    }
+  }, []);
 
   useEffect(() => {
     const idx = ["today", "week", "all"].indexOf(filter);

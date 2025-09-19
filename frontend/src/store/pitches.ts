@@ -4,7 +4,7 @@ import { api } from "../lib/api";
 import { auth } from "../lib/firebase";
 import { useAuth } from "./auth";
 
-type Analytics = { totalPitches: number; totalVotes: number; totalComments: number; lastPosted: string | null };
+export type Analytics = { totalPitches: number; totalVotes: number; totalComments: number; lastPosted: string | null };
 
 type State = {
   trending: Pitch[];
@@ -21,13 +21,13 @@ type State = {
   loadingPitch: boolean;
   loadingMy: boolean;
 
-  fetchTrending: () => Promise<void>;
-  fetchLatest: () => Promise<void>;
+  fetchTrending: (hydrate?: Pitch[]) => Promise<void>;
+  fetchLatest: (hydrate?: Pitch[]) => Promise<void>;
   fetchById: (id: string) => Promise<void>;
   fetchComments: (id: string) => Promise<void>;
 
-  fetchMyPitches: (sort: "created" | "votes") => Promise<void>;
-  fetchMyAnalytics: () => Promise<void>;
+  fetchMyPitches: (hydrate?: Pitch[]) => Promise<void>;
+  fetchMyAnalytics: (hydrate?: Analytics) => Promise<void>;
   getMyVote: (id: string) => Promise<-1 | 0 | 1>;
 
   postPitch: (p: { title: string; body: string; tags: string[] }) => Promise<Pitch>;
@@ -50,22 +50,30 @@ export const usePitches = create<State>((set, get) => ({
   loadingPitch: false,
   loadingMy: false,
 
-  async fetchTrending() {
+  async fetchTrending(hydrate?: Pitch[]) {
+    if (hydrate && hydrate.length > 0) {
+      set({ trending: hydrate });
+      return;
+    }
+    if (get().trending.length > 0) return;
     set({ loadingTrending: true });
     try {
       const { data } = await api.get<Pitch[]>("/pitches/trending");
-      console.log("fetchTrending returned:", data);
       set({ trending: data });
     } finally {
       set({ loadingTrending: false });
     }
   },
 
-  async fetchLatest() {
+  async fetchLatest(hydrate?: Pitch[]) {
+    if (hydrate && hydrate.length > 0) {
+      set({ latest: hydrate });
+      return;
+    }
+    if (get().latest.length > 0) return;
     set({ loadingLatest: true });
     try {
       const { data } = await api.get<Pitch[]>("/pitches/latest");
-      console.log("fetchLatest returned:", data);
       set({ latest: data });
     } finally {
       set({ loadingLatest: false });
@@ -89,23 +97,31 @@ export const usePitches = create<State>((set, get) => ({
   set((s) => ({ commentsByPitch: { ...s.commentsByPitch, [id]: data } }));
   },
 
-  async fetchMyPitches(sort) {
+  async fetchMyPitches(sort, hydrate?: Pitch[]) {
     const user = useAuth.getState().user;
     if (!user) throw new Error("login-required");
+    if (hydrate && hydrate.length > 0) {
+      set({ myPitches: hydrate });
+      return;
+    }
     set({ loadingMy: true });
     try {
-      const { data } = await api.get<Pitch[]>(`/users/me/pitches?sort=${sort === "votes" ? "votes" : "created"}`);
+        const { data } = await api.get<Pitch[]>(`/users/me/pitches?sort=created`);
       set({ myPitches: data });
     } finally {
       set({ loadingMy: false });
     }
   },
 
-  async fetchMyAnalytics() {
-  const user = useAuth.getState().user;
-  if (!user) throw new Error("login-required");
-  const { data: a } = await api.get<Analytics>("/users/me/analytics");
-  set({ myAnalytics: a });
+  async fetchMyAnalytics(hydrate?: Analytics) {
+    const user = useAuth.getState().user;
+    if (!user) throw new Error("login-required");
+    if (hydrate) {
+      set({ myAnalytics: hydrate });
+      return;
+    }
+    const { data: a } = await api.get<Analytics>("/users/me/analytics");
+    set({ myAnalytics: a });
   },
 
   async getMyVote(id) {

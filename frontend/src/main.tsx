@@ -10,6 +10,8 @@ import PostPitch from "./pages/Post";
 import Analytics from "./pages/Analytics";
 import "./styles/index.css";
 
+import Super from "./pages/Super";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -21,6 +23,7 @@ const router = createBrowserRouter([
       { path: "pitch/:id", element: <PitchDetail /> },
       { path: "post", element: <PostPitch /> },
       { path: "analytics", element: <Analytics /> },
+  { path: "analytics/super/:id", element: <Super /> },
     ],
   },
 ]);

@@ -1,3 +1,12 @@
+// Extend Window type for SSR hydration
+import type { Pitch } from "../types";
+import type { Analytics } from "../store/pitches";
+declare global {
+  interface Window {
+    __MY_ANALYTICS__?: Analytics;
+    __MY_PITCHES__?: Pitch[];
+  }
+}
 import { useEffect } from "react";
 
 function formatDateFancy(dateStr: string) {
@@ -20,19 +29,27 @@ import { useAuth } from "../store/auth";
 
 export default function Analytics() {
 
-  const fetchMyAnalytics = usePitches((s) => s.fetchMyAnalytics);
-  const fetchMyPitches = usePitches((s) => s.fetchMyPitches);
+  // Use hydration methods directly from store
   const myAnalytics = usePitches((s) => s.myAnalytics);
   const myPitches = usePitches((s) => s.myPitches);
   const user = useAuth((s) => s.user);
   const navigate = useNavigate();
 
   useEffect(() => {
+    // SSR hydration: use window.__MY_ANALYTICS__ and window.__MY_PITCHES__ if available
     if (user) {
-      fetchMyAnalytics();
-      fetchMyPitches("created");
+      if (window.__MY_ANALYTICS__) {
+  usePitches.getState().fetchMyAnalytics(window.__MY_ANALYTICS__);
+      } else {
+  usePitches.getState().fetchMyAnalytics();
+      }
+      if (Array.isArray(window.__MY_PITCHES__)) {
+  usePitches.getState().fetchMyPitches(window.__MY_PITCHES__);
+      } else {
+  usePitches.getState().fetchMyPitches();
+      }
     }
-  }, [fetchMyAnalytics, fetchMyPitches, user]);
+  }, [user]);
 
   if (!user) {
     return (
@@ -89,11 +106,19 @@ export default function Analytics() {
               <li className="p-8 text-center text-gray-400">No ideas pitched yet.</li>
             )}
             {myPitches.map((p, i) => (
-              <li
-                key={p._id || i}
-                className="group cursor-pointer flex flex-col md:flex-row items-start md:items-center gap-4 px-6 py-4 bg-white border border-brand-100 rounded-2xl shadow-sm hover:shadow-lg hover:border-brand-500 transition-all duration-200"
-                onClick={() => navigate(`/pitches/${p._id}`)}
-              >
+                    <li
+                      key={p._id || i}
+                      className="group cursor-pointer flex flex-col md:flex-row items-start md:items-center gap-4 px-6 py-4 bg-white border border-brand-100 rounded-2xl shadow-sm hover:shadow-lg hover:border-brand-500 transition-all duration-200"
+                      onClick={() => {
+                        if (p._id) {
+                          console.log('Navigating to super page for pitch:', p._id);
+                          navigate(`/analytics/super/${p._id}`);
+                        } else {
+                          console.warn('Pitch ID is missing for:', p);
+                          alert('Pitch ID is missing. Cannot open super tools for this pitch.');
+                        }
+                      }}
+                    >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-1">
                     <span className="font-bold text-lg text-brand-700 group-hover:text-brand-600">{p.title}</span>

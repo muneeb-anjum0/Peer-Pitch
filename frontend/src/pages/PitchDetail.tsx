@@ -18,10 +18,10 @@ export default function PitchDetail() {
 
   useEffect(() => {
     if (!id) return;
-    fetchById(id);
-    fetchComments(id);
+    if (pitch === undefined) fetchById(id);
+    if (!comments || comments.length === 0) fetchComments(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, pitch, comments]);
 
   useEffect(() => {
     if (pitch?.title) {

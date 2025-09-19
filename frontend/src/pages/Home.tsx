@@ -1,3 +1,10 @@
+// Extend Window type for SSR hydration
+declare global {
+  interface Window {
+    __TRENDING_PITCHES__?: import("../types").Pitch[];
+    __LATEST_PITCHES__?: import("../types").Pitch[];
+  }
+}
 import Hero from "../components/Hero";
 import StatBar from "../components/StatBar";
 import LiveTicker from "../components/LiveTicker";
@@ -9,17 +16,25 @@ import { useEffect } from "react";
 import { usePitches } from "../store/pitches";
 
 export default function Home() {
-  const fetchTrending = usePitches((s) => s.fetchTrending);
-  const fetchLatest = usePitches((s) => s.fetchLatest);
+  // Use hydration methods directly from store
   const trendingRaw = usePitches((s) => s.trending);
   const latestRaw = usePitches((s) => s.latest);
   const trending = Array.isArray(trendingRaw) ? trendingRaw : [];
   const latest = Array.isArray(latestRaw) ? latestRaw : [];
 
   useEffect(() => {
-    fetchTrending();
-    fetchLatest(1);
-  }, [fetchTrending, fetchLatest]);
+    // SSR hydration: use window.__TRENDING_PITCHES__ and window.__LATEST_PITCHES__ if available
+    if (Array.isArray(window.__TRENDING_PITCHES__)) {
+  usePitches.getState().fetchTrending(window.__TRENDING_PITCHES__);
+    } else {
+      usePitches.getState().fetchTrending();
+    }
+    if (Array.isArray(window.__LATEST_PITCHES__)) {
+  usePitches.getState().fetchLatest(window.__LATEST_PITCHES__);
+    } else {
+  usePitches.getState().fetchLatest();
+    }
+  }, []);
 
   return (
     <div>

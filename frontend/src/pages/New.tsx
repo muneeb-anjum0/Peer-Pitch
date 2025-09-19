@@ -1,3 +1,9 @@
+// Extend Window type for SSR hydration
+declare global {
+  interface Window {
+    __LATEST_PITCHES__?: import("../types").Pitch[];
+  }
+}
 import { useEffect, useRef, useState } from "react";
 import { usePitches } from "../store/pitches";
 import PitchCard from "../components/PitchCard";
@@ -12,7 +18,7 @@ function SparkIcon() {
 }
 
 export default function New() {
-  const fetchLatest = usePitches((s) => s.fetchLatest);
+  // Use hydration method directly from store
   const latestRaw = usePitches((s) => s.latest);
   const latest = Array.isArray(latestRaw) ? latestRaw : [];
   const loadingLatest = usePitches((s) => s.loadingLatest);
@@ -22,7 +28,14 @@ export default function New() {
   const [slider, setSlider] = useState<{ left: number; width: number }>({ left: 0, width: 0 });
 
 
-  useEffect(() => { fetchLatest(); }, [fetchLatest]);
+  useEffect(() => {
+    // SSR hydration: use window.__LATEST_PITCHES__ if available
+    if (Array.isArray(window.__LATEST_PITCHES__)) {
+  usePitches.getState().fetchLatest(window.__LATEST_PITCHES__);
+    } else {
+  usePitches.getState().fetchLatest();
+    }
+  }, []);
 
   useEffect(() => {
     const idx = ["newest", "rising", "discussed"].indexOf(filter);

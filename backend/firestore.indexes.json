@@ -1,0 +1,29 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "pitches",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "author.uid", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "pitches",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "votes", "order": "DESCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "comments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pitchId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

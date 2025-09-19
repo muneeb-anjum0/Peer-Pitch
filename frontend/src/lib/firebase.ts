@@ -7,6 +7,7 @@ import {
   signOut,
 } from "firebase/auth";
 import type { User } from "firebase/auth";
+import { initializeFirestore, persistentLocalCache } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCBaLDPauECqHSYPIbABpX4Lsw4M3aAhwU",
@@ -20,6 +21,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+export const db = initializeFirestore(app, {
+  localCache: persistentLocalCache()
+});
 const provider = new GoogleAuthProvider();
 
 export const firebaseLoginGoogle = async () => {

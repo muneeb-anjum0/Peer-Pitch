@@ -23,8 +23,16 @@ export const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 export const firebaseLoginGoogle = async () => {
-  const res = await signInWithPopup(auth, provider);
-  return res.user;
+  try {
+    const res = await signInWithPopup(auth, provider);
+    return res.user;
+  } catch (error: any) {
+    if (error.code === 'auth/cancelled-popup-request') {
+      // Ignore cancelled popup requests
+      return null;
+    }
+    throw error;
+  }
 };
 
 export const firebaseLogout = async () => {

@@ -11,8 +11,10 @@ import { usePitches } from "../store/pitches";
 export default function Home() {
   const fetchTrending = usePitches((s) => s.fetchTrending);
   const fetchLatest = usePitches((s) => s.fetchLatest);
-  const trending = usePitches((s) => s.trending);
-  const latest = usePitches((s) => s.latest);
+  const trendingRaw = usePitches((s) => s.trending);
+  const latestRaw = usePitches((s) => s.latest);
+  const trending = Array.isArray(trendingRaw) ? trendingRaw : [];
+  const latest = Array.isArray(latestRaw) ? latestRaw : [];
 
   useEffect(() => {
     fetchTrending();

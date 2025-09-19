@@ -13,49 +13,14 @@ function SparkIcon() {
 
 export default function New() {
   const fetchLatest = usePitches((s) => s.fetchLatest);
-  const latest = usePitches((s) => s.latest);
+  const latestRaw = usePitches((s) => s.latest);
+  const latest = Array.isArray(latestRaw) ? latestRaw : [];
   const loadingLatest = usePitches((s) => s.loadingLatest);
 
   const [filter, setFilter] = useState<"newest" | "rising" | "discussed">("newest");
   const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [slider, setSlider] = useState<{ left: number; width: number }>({ left: 0, width: 0 });
 
-  // Demo pitches for preview
-  const demoPitches = [
-    {
-      _id: "demoN1",
-      title: "Flash Feedback for Coders",
-      body: "Write code, hit 'share snippet', and instantly get peer feedback...",
-      tags: ["Coding", "Feedback"],
-      votes: 12,
-      commentCount: 2,
-      author: { uid: "u4", name: "Noah" },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      _id: "demoN2",
-      title: "Instant Idea Roulette",
-      body: "Spin a wheel of random startup ideas from the community...",
-      tags: ["Creativity", "Brainstorm"],
-      votes: 7,
-      commentCount: 1,
-      author: { uid: "u5", name: "Zara" },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      _id: "demoN3",
-      title: "Neighborhood Tool Library",
-      body: "A platform for neighbors to lend and borrow tools...",
-      tags: ["Community", "Sharing"],
-      votes: 19,
-      commentCount: 4,
-      author: { uid: "u6", name: "Usman" },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-  ];
 
   useEffect(() => { fetchLatest(); }, [fetchLatest]);
 
@@ -103,7 +68,7 @@ export default function New() {
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <SparkIcon />
             <span>
-              {latest.length + demoPitches.length} fresh ideas today
+              {latest.length} fresh ideas today
             </span>
           </div>
 
@@ -115,7 +80,7 @@ export default function New() {
             ].map((opt, i) => (
               <button
                 key={opt.key}
-                ref={(el) => (btnRefs.current[i] = el)}
+                ref={(el) => { btnRefs.current[i] = el; }}
                 onClick={() => setFilter(opt.key as any)}
                 className={`relative pb-1 text-sm font-medium transition-colors ${
                   filter === (opt.key as any) ? "text-gray-900" : "text-gray-500 hover:text-gray-700"
@@ -145,7 +110,7 @@ export default function New() {
 
         <div className="rounded-3xl border border-gray-100 bg-white/70 p-4 shadow-[0_18px_60px_rgba(16,24,40,.06)] sm:p-6">
           {/* Loading state */}
-          {loadingLatest && latest.length === 0 && demoPitches.length === 0 && (
+          {loadingLatest && latest.length === 0 && (
             <div className="rounded-xl border border-gray-100 bg-white p-6 text-center text-gray-500 shadow-sm">
               Loading fresh ideas…
             </div>
@@ -153,9 +118,6 @@ export default function New() {
 
           {/* Discovery grid: slightly tighter and more “flowy” than Trending */}
           <div className="grid gap-4 sm:gap-5">
-            {demoPitches.map((p) => (
-              <PitchCard key={p._id} pitch={p as any} />
-            ))}
             {!loadingLatest && latest.map((p) => <PitchCard key={p._id} pitch={p} />)}
           </div>
         </div>

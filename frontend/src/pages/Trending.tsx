@@ -44,48 +44,14 @@ function StarIcon() {
 
 export default function Trending() {
   const fetchTrending = usePitches((s) => s.fetchTrending);
-  const trending = usePitches((s) => s.trending);
+  const trendingRaw = usePitches((s) => s.trending);
+  const trending = Array.isArray(trendingRaw) ? trendingRaw : [];
   const loadingTrending = usePitches((s) => s.loadingTrending);
 
   const [filter, setFilter] = useState("today");
   const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [slider, setSlider] = useState<{ left: number; width: number }>({ left: 0, width: 0 });
 
-  const demoPitches = [
-    {
-      _id: "demo1",
-      title: "AI Tutor for Every Subject",
-      body: "An AI-driven tutor that adapts to your learning style...",
-      tags: ["AI", "Education"],
-      votes: 91,
-      commentCount: 5,
-      author: { uid: "u1", name: "Maya" },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      _id: "demo2",
-      title: "Instant Community Grocery Co-op",
-      body: "Neighbors pool grocery orders together...",
-      tags: ["Community", "Marketplace"],
-      votes: 74,
-      commentCount: 8,
-      author: { uid: "u2", name: "Ali" },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      _id: "demo3",
-      title: "One-Tap Mentor Matching",
-      body: "Tap once to match with a mentor in your industry...",
-      tags: ["Networking", "Mentorship"],
-      votes: 63,
-      commentCount: 3,
-      author: { uid: "u3", name: "Sara" },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-  ];
 
   useEffect(() => { fetchTrending(); }, [fetchTrending]);
 
@@ -112,7 +78,7 @@ export default function Trending() {
         {/* Quick stats with SVG icons */}
         <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-gray-600">
           <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 shadow-sm">
-            <LightbulbIcon /> {trending.length + demoPitches.length} ideas live
+            <LightbulbIcon /> {trending.length} ideas live
           </div>
           <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 shadow-sm">
             <ChatIcon /> Most active idea: Mentor Matching
@@ -128,7 +94,7 @@ export default function Trending() {
             {["today", "week", "all"].map((opt, i) => (
               <button
                 key={opt}
-                ref={(el) => (btnRefs.current[i] = el)}
+                ref={(el) => { btnRefs.current[i] = el; }}
                 onClick={() => setFilter(opt)}
                 className={`relative pb-1 text-sm font-medium transition-colors ${
                   filter === opt ? "text-gray-900" : "text-gray-500 hover:text-gray-700"
@@ -146,13 +112,12 @@ export default function Trending() {
       </header>
 
       <main className="mx-auto max-w-6xl px-4 pb-20">
-        {loadingTrending && trending.length === 0 && demoPitches.length === 0 && (
+        {loadingTrending && trending.length === 0 && (
           <div className="rounded-xl border border-gray-100 bg-white p-6 text-center text-gray-500 shadow-sm">
             Loading trending ideas…
           </div>
         )}
         <div className="grid gap-5">
-          {demoPitches.map((p) => <PitchCard key={p._id} pitch={p as any} />)}
           {!loadingTrending && trending.map((p) => <PitchCard key={p._id} pitch={p} />)}
         </div>
       </main>

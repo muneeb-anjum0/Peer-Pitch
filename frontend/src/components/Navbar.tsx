@@ -51,13 +51,15 @@ export default function Navbar({ onLogoClick }: { onLogoClick?: () => void }) {
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-        <button
+        <Button
+          variant="ghost"
+          size="md"
           onClick={onLogoClick}
-          className="text-lg font-black tracking-tight text-gray-900"
+          className="text-lg font-black tracking-tight text-gray-900 px-0 py-0 bg-transparent border-none shadow-none hover:bg-transparent"
           aria-label="PulseProof Home"
         >
           PulseProof
-        </button>
+        </Button>
 
         <nav className="relative hidden sm:block">
           <div ref={containerRef} className="relative flex items-center gap-8">
@@ -66,7 +68,7 @@ export default function Navbar({ onLogoClick }: { onLogoClick?: () => void }) {
               return (
                 <button
                   key={t.to}
-                  ref={el => (btnRefs.current[i] = el)}
+                    ref={el => { btnRefs.current[i] = el; }}
                   onClick={() => navigate(t.to)}
                   className={`relative pb-1 text-sm font-medium transition-colors ${
                     active ? "text-gray-900" : "text-gray-500 hover:text-gray-700"
@@ -87,14 +89,18 @@ export default function Navbar({ onLogoClick }: { onLogoClick?: () => void }) {
         </nav>
 
         <div className="flex items-center gap-2">
-          <button onClick={() => (user ? navigate("/post") : firebaseLoginGoogle())}>
-            <Button variant="primary" size="md">{user ? "Post" : "Login"}</Button>
-          </button>
+          <Button
+            variant="primary"
+            size="md"
+            onClick={() => (user ? navigate("/post") : firebaseLoginGoogle())}
+          >
+            {user ? "Post" : "Login"}
+          </Button>
           {user && (
             <>
-              <button onClick={() => firebaseLogout()}>
-                <Button variant="neutral" size="md">Logout</Button>
-              </button>
+              <Button variant="neutral" size="md" onClick={() => firebaseLogout()}>
+                Logout
+              </Button>
               <Link to="/" className="ml-1 flex items-center gap-2">
                 {user.photoURL ? (
                   <img src={user.photoURL} alt="avatar" className="h-9 w-9 rounded-full ring-1 ring-gray-200" />

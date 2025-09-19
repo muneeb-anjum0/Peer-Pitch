@@ -1,30 +1,26 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "pulseproof-backend",
+  "private": true,
+  "type": "module",
   "scripts": {
-  "test": "echo \"Error: no test specified\" && exit 1",
-  "dev": "concurrently \"nodemon src/server.js\" \"npm --prefix ../frontend run dev\"",
-  "start": "node src/server.js"
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc -p ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "bcryptjs": "^3.0.2",
-    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "dotenv": "^17.2.2",
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.18.1",
-    "zod": "^4.1.9"
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase-admin": "^12.5.0",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "concurrently": "^9.2.1",
-    "nodemon": "^3.1.10",
-    "npm-run-all": "^4.1.5"
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/morgan": "^1.9.9",
+    "tsx": "^4.16.2",
+    "typescript": "^5.6.3"
   }
 }

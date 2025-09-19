@@ -34,9 +34,7 @@ export default function ThemedLogin() {
           </ul>
 
           <div className="mt-8">
-            <button onClick={firebaseLoginGoogle}>
-              <Button variant="primary" size="lg">Continue with Google</Button>
-            </button>
+            <Button variant="primary" size="lg" onClick={firebaseLoginGoogle}>Continue with Google</Button>
             <div className="mt-3 text-xs text-gray-500">
               By continuing, you agree to PulseProof’s community guidelines.
             </div>

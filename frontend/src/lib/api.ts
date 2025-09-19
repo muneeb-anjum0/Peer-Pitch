@@ -11,6 +11,24 @@ export const api = axios.create({
   },
 });
 
+
+// Attach Firebase ID token to requests if available
+import { auth } from "./firebase";
+api.interceptors.request.use(async (config) => {
+  const user = auth.currentUser;
+  if (user) {
+    const token = await user.getIdToken();
+    config.headers = config.headers || {};
+    config.headers["Authorization"] = `Bearer ${token}`;
+    // Debug logging
+    console.log('API Debug: Outgoing Authorization header:', config.headers["Authorization"]);
+  } else {
+    // Debug logging
+    console.log('API Debug: No user, no Authorization header');
+  }
+  return config;
+});
+
 // Interceptor (optional logging)
 api.interceptors.response.use(
   (r) => r,

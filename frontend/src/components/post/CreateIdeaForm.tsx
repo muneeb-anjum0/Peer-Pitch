@@ -1,10 +1,15 @@
 import { useState, useMemo } from "react";
 import Button from "../ui/Button";
+import { usePitches } from "../../store/pitches";
+import { auth } from "../../lib/firebase";
 
-export default function CreateIdeaForm() {
+function CreateIdeaForm() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [tags, setTags] = useState("");
+  const postPitch = usePitches((s) => s.postPitch);
+  const fetchTrending = usePitches((s) => s.fetchTrending);
+  const fetchLatest = usePitches((s) => s.fetchLatest);
 
   const wordCount = useMemo(() => {
     const words = body.trim().split(/\s+/).filter(Boolean);
@@ -13,19 +18,39 @@ export default function CreateIdeaForm() {
 
   const tooLong = wordCount > 220; // soft guard for ~200 words
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Phase-1: you can wire this to your backend later.
-    // For now just log; you might show a toast.
-    console.log({
+    if (!auth.currentUser) {
+      alert("You must be logged in to publish an idea.");
+      return;
+    }
+    if (body.trim().length < 30) {
+      alert("Idea must be at least 30 characters.");
+      return;
+    }
+    const tagsArray = tags
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean)
+      .slice(0, 5);
+    const payload = {
       title,
       body,
-      tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
-    });
-    alert("Submitted! (Stub — wire to backend later)");
-    setTitle("");
-    setBody("");
-    setTags("");
+      tags: tagsArray
+    };
+    try {
+      const created = await postPitch(payload);
+      alert("Published!"); // replace with toast
+      // optionally navigate to detail: navigate(`/pitch/${created._id}`)
+      setTitle("");
+      setBody("");
+      setTags("");
+      // Refresh lists so new pitch appears immediately
+      fetchTrending();
+      fetchLatest();
+    } catch (err: any) {
+      alert(err?.message ?? "Failed");
+    }
   };
 
   return (
@@ -99,3 +124,5 @@ export default function CreateIdeaForm() {
     </form>
   );
 }
+
+export default CreateIdeaForm;

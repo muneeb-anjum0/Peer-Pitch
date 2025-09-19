@@ -12,27 +12,18 @@ export type Pitch = {
   tags: string[];
   votes: number;
   commentCount: number;
-  author: {
-    uid: string;
-    name: string;
-    avatar?: string | null;
-  };
-  createdAt: string; // ISO
-  updatedAt: string; // ISO
+  author: { uid: string; name: string; photoURL?: string };
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type Comment = {
   _id: string;
-  pitchId: string;
+  author: { uid: string; name: string; photoURL?: string };
   body: string;
-  author: {
-    uid: string;
-    name: string;
-    avatar?: string | null;
-  };
   createdAt: string;
-  updatedAt: string;
 };
+
 
 export type Paginated<T> = {
   items: T[];

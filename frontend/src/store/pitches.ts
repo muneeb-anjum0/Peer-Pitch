@@ -127,11 +127,7 @@ export const usePitches = create<State>((set, get) => ({
 
   async postComment(id, text) {
     if (!auth.currentUser) throw new Error("login-required");
-    const c = await api<Comment>(`/pitches/${id}/comments`, {
-      method: "POST",
-      body: JSON.stringify({ body: text }),
-      auth: true,
-    });
+    const { data: c } = await api.post<Comment>(`/pitches/${id}/comments`, { body: text });
     set((s) => ({
       commentsByPitch: {
         ...s.commentsByPitch,

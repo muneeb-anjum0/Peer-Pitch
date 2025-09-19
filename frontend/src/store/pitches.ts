@@ -2,6 +2,7 @@ import { create } from "zustand";
 import type { Pitch, Comment } from "../types";
 import { api } from "../lib/api";
 import { auth } from "../lib/firebase";
+import { useAuth } from "./auth";
 
 type Analytics = { totalPitches: number; totalVotes: number; totalComments: number; lastPosted: string | null };
 
@@ -89,7 +90,8 @@ export const usePitches = create<State>((set, get) => ({
   },
 
   async fetchMyPitches(sort) {
-    if (!auth.currentUser) throw new Error("login-required");
+    const user = useAuth.getState().user;
+    if (!user) throw new Error("login-required");
     set({ loadingMy: true });
     try {
       const { data } = await api.get<Pitch[]>(`/users/me/pitches?sort=${sort === "votes" ? "votes" : "created"}`);
@@ -100,9 +102,10 @@ export const usePitches = create<State>((set, get) => ({
   },
 
   async fetchMyAnalytics() {
-    if (!auth.currentUser) throw new Error("login-required");
-    const a = await api<Analytics>("/users/me/analytics", { auth: true });
-    set({ myAnalytics: a });
+  const user = useAuth.getState().user;
+  if (!user) throw new Error("login-required");
+  const { data: a } = await api.get<Analytics>("/users/me/analytics");
+  set({ myAnalytics: a });
   },
 
   async getMyVote(id) {

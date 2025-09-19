@@ -7,6 +7,7 @@ import Trending from "./pages/Trending";
 import New from "./pages/New";
 import PitchDetail from "./pages/PitchDetail";
 import PostPitch from "./pages/Post";
+import Analytics from "./pages/Analytics";
 import "./styles/index.css";
 
 const router = createBrowserRouter([
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
       { path: "new", element: <New /> },
       { path: "pitch/:id", element: <PitchDetail /> },
       { path: "post", element: <PostPitch /> },
+      { path: "analytics", element: <Analytics /> },
     ],
   },
 ]);

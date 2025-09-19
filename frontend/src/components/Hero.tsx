@@ -10,7 +10,7 @@ export default function Hero() {
         style={{
           backgroundImage:
             "linear-gradient(to right, #f2f4f7 1px, transparent 1px), linear-gradient(to bottom, #f2f4f7 1px, transparent 1px)",
-          backgroundSize: "32px 32px",
+          backgroundSize: "32px 30px",
         }}
       />
       <div

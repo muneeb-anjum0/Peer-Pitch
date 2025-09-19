@@ -5,8 +5,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+    host: true, // Enables network access
   },
   preview: {
     port: 5173,
+    host: true, // Enables network access
   },
 });

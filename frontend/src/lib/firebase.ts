@@ -31,6 +31,11 @@ export const firebaseLoginGoogle = async () => {
       // Ignore cancelled popup requests
       return null;
     }
+    if (error.code === 'auth/popup-closed-by-user') {
+      // Handle popup closed by user gracefully
+      console.log('Login popup closed by user.');
+      return null;
+    }
     throw error;
   }
 };

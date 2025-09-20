@@ -1,3 +1,7 @@
+/* Utility for super rounded button */
+.btn-super-rounded {
+  border-radius: 9999px !important;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

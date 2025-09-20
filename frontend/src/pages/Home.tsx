@@ -51,7 +51,13 @@ export default function Home() {
           <div>
             <div className="mb-6 flex items-center gap-3">
               <h2 className="text-2xl font-black text-gray-900">Trending now</h2>
-              <div className="h-px flex-1 bg-gray-200"></div>
+              <div
+                className="h-px flex-1"
+                style={{
+                  background:
+                    "linear-gradient(90deg, black 60%, rgba(42,148,255,0.10) 80%, rgba(255,251,229,0.10) 100%)"
+                }}
+              ></div>
             </div>
             <div className="grid gap-4">
               {trending.map((p) => (
@@ -64,7 +70,13 @@ export default function Home() {
           <div>
             <div className="mb-6 flex items-center gap-3">
               <h2 className="text-2xl font-black text-gray-900">Fresh pitches</h2>
-              <div className="h-px flex-1 bg-gray-200"></div>
+              <div
+                className="h-px flex-1"
+                style={{
+                  background:
+                    "linear-gradient(90deg, black 60%, rgba(42,148,255,0.10) 80%, rgba(255,251,229,0.10) 100%)"
+                }}
+              ></div>
             </div>
             <div className="grid gap-4">
               {latest.map((p) => (

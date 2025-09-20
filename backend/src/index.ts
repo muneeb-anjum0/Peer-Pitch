@@ -25,11 +25,4 @@ app.use("/api/users", users);
 // 404
 app.use((_req, res) => res.status(404).json({ error: "Route not found" }));
 
-console.log('Loaded Firebase ENV:', {
-  FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
-  FIREBASE_CLIENT_EMAIL: process.env.FIREBASE_CLIENT_EMAIL,
-  FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY ? '[REDACTED]' : undefined
-});
-app.listen(PORT, () => {
-  console.log(`PulseProof API listening on :${PORT}`);
-});
+app.listen(PORT);

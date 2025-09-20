@@ -30,9 +30,9 @@ export default function App() {
   useEffect(() => { window.scrollTo({ top: 0, behavior: "smooth" }); }, [loc.pathname]);
 
   return (
-    <div className="min-h-dvh bg-white text-gray-900">
+    <div className="min-h-screen flex flex-col bg-white text-gray-900">
       <Navbar onLogoClick={() => navigate("/")} />
-      <main className="mx-auto w-full max-w-none">
+      <main className="mx-auto w-full max-w-none flex-1">
         <Outlet />
       </main>
       <Footer />

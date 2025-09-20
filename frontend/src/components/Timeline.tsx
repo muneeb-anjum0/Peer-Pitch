@@ -27,7 +27,14 @@ export default function Timeline() {
                 <div className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-500 text-sm font-bold text-white shadow-md group-hover:shadow-[0_0_15px_rgba(42,148,255,0.4)] transition">
                   {i + 1}
                 </div>
-                <div className="mt-3 w-full max-w-xs rounded-xl border border-gray-100 bg-white p-4 shadow-[0_4px_16px_rgba(0,0,0,.05)] transition group-hover:shadow-[0_10px_30px_rgba(16,24,40,.12)]">
+                <div
+                  className="mt-3 w-full max-w-xs rounded-xl border border-gray-100 p-4 shadow-[0_4px_16px_rgba(0,0,0,.05)] transition group-hover:shadow-[0_10px_30px_rgba(16,24,40,.12)]"
+                  style={{
+                    background:
+                      "radial-gradient(circle at 20% 30%, rgba(224,242,255,0.18) 14%, transparent 70%), " +
+                      "radial-gradient(circle at 80% 70%, rgba(255,251,229,0.18) 16%, transparent 70%), white"
+                  }}
+                >
                   <h3 className="text-sm font-semibold text-gray-900">{s.t}</h3>
                   <p className="mt-1 text-xs text-gray-600">{s.d}</p>
                 </div>
@@ -47,7 +54,14 @@ export default function Timeline() {
                 <div className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-500 text-sm font-bold text-white shadow-md">
                   {i + 1}
                 </div>
-                <div className="mt-3 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+                <div
+                  className="mt-3 rounded-xl border border-gray-100 p-4 shadow-sm"
+                  style={{
+                    background:
+                      "radial-gradient(circle at 20% 30%, rgba(224,242,255,0.18) 14%, transparent 70%), " +
+                      "radial-gradient(circle at 80% 70%, rgba(255,251,229,0.18) 16%, transparent 70%), white"
+                  }}
+                >
                   <h3 className="text-sm font-semibold text-gray-900">{s.t}</h3>
                   <p className="mt-1 text-xs text-gray-600">{s.d}</p>
                 </div>

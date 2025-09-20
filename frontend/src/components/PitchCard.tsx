@@ -14,36 +14,50 @@ export default function PitchCard({ pitch }: { pitch: Pitch }) {
   ];
 
   return (
-    <article className="group rounded-2xl border border-gray-100 bg-white p-4 shadow-[0_8px_30px_rgba(0,0,0,.04)] transition hover:-translate-y-0.5 hover:shadow-[0_18px_60px_rgba(16,24,40,.10)]">
-      <div className="flex items-start gap-3">
-        <VoteButtons pitchId={pitch._id} votes={pitch.votes} />
+    <Link
+      to={`/pitch/${pitch._id}`}
+      className="block group rounded-2xl border border-gray-200 bg-white p-5 shadow transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-brand-200 focus:outline-none focus:ring-2 focus:ring-brand-300"
+      tabIndex={0}
+    >
+      <div className="flex items-start gap-4">
+        {/* Prevent click propagation for VoteButtons */}
+        <div onClick={e => e.stopPropagation()} onMouseDown={e => e.stopPropagation()}>
+          <VoteButtons pitchId={pitch._id} votes={pitch.votes} />
+        </div>
         <div className="flex-1">
-          <Link to={`/pitch/${pitch._id}`} className="text-lg font-semibold text-gray-900 hover:underline">
+          <div className="text-xl font-bold text-gray-900 group-hover:text-brand-700">
             {pitch.title}
-          </Link>
-          <p className="mt-2 line-clamp-3 text-gray-600">{pitch.body}</p>
+          </div>
+          <p className="mt-2 line-clamp-3 text-gray-700 text-base">{pitch.body}</p>
 
-          <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-500">
-            <span>by {pitch.author.name}</span>
-            <span>•</span>
-            <time dateTime={pitch.createdAt}>
-              {new Date(pitch.createdAt).toLocaleDateString()}
-            </time>
-            <span>•</span>
-            <button
-              onClick={() => setOpen((o) => !o)}
-              className="hover:underline"
-            >
-              {pitch.commentCount} comments
-            </button>
+          <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-gray-500">
+            <span className="flex items-center gap-1">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-3.33 0-10 1.67-10 5v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2c0-3.33-6.67-5-10-5z" fill="currentColor"/></svg>
+              <span>by {pitch.author.name}</span>
+            </span>
+            <span className="flex items-center gap-1">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v2h10V4h2v2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2V4h2zm0 4v10h10V8H7z" fill="currentColor"/></svg>
+              <time dateTime={pitch.createdAt}>
+                {new Date(pitch.createdAt).toLocaleDateString()}
+              </time>
+            </span>
+            <span className="flex items-center gap-1">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" fill="currentColor"/></svg>
+              <button
+                onClick={e => { e.stopPropagation(); setOpen((o) => !o); }}
+                className="hover:underline text-brand-700 font-medium"
+              >
+                {pitch.commentCount} comments
+              </button>
+            </span>
           </div>
 
           {/* Expandable comments */}
           {open && (
-            <div className="mt-3 space-y-2 border-t border-gray-100 pt-3">
+            <div className="mt-4 space-y-2 border-t border-gray-100 pt-4">
               {demoComments.map((c) => (
                 <div key={c.id} className="text-sm">
-                  <span className="font-medium text-gray-900">{c.author}</span>{" "}
+                  <span className="font-semibold text-brand-700">{c.author}</span>{" "}
                   <span className="text-gray-700">{c.text}</span>
                 </div>
               ))}
@@ -51,6 +65,6 @@ export default function PitchCard({ pitch }: { pitch: Pitch }) {
           )}
         </div>
       </div>
-    </article>
+    </Link>
   );
 }

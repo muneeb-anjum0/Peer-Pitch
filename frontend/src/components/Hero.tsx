@@ -39,11 +39,17 @@ export default function Hero() {
         </p>
 
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-          <Link to="/post">
-            <Button variant="primary" size="lg">Proof an idea</Button>
-          </Link>
+            <Link to="/post">
+                <Button
+                  className="bg-brand-600 text-white font-semibold px-6 py-2 btn-super-rounded transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-300 hover:bg-brand-700 hover:shadow-lg hover:-translate-y-0.5"
+                  style={{ boxShadow: "none", border: "none" }}
+                  size="lg"
+                >
+                  Proof an idea
+                </Button>
+            </Link>
           <Link to="/trending">
-            <Button variant="neutral" size="lg">Explore community</Button>
+            <Button variant="neutral" size="lg" className="btn-super-rounded">Explore community</Button>
           </Link>
         </div>
       </div>

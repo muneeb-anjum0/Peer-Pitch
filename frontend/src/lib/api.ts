@@ -20,11 +20,9 @@ api.interceptors.request.use(async (config) => {
     const token = await user.getIdToken();
     config.headers = config.headers || {};
     config.headers["Authorization"] = `Bearer ${token}`;
-    // Debug logging
-    console.log('API Debug: Outgoing Authorization header:', config.headers["Authorization"]);
+  //
   } else {
-    // Debug logging
-    console.log('API Debug: No user, no Authorization header');
+  //
   }
   return config;
 });
@@ -33,8 +31,7 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(
   (r) => r,
   (err) => {
-    // eslint-disable-next-line no-console
-    console.error("API error:", err?.response?.data || err.message);
+  //
     return Promise.reject(err);
   }
 );
